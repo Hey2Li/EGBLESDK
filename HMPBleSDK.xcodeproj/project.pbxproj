@@ -1,0 +1,470 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		48294424197C316B0AE5FF40 /* Pods_HMPBleSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D45CFA4DC120B032AF455C0 /* Pods_HMPBleSDK.framework */; };
+		9B020E1429DFDFE200EBBC83 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B020E1329DFDFE200EBBC83 /* AppDelegate.m */; };
+		9B020E1729DFDFE200EBBC83 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B020E1629DFDFE200EBBC83 /* SceneDelegate.m */; };
+		9B020E1A29DFDFE200EBBC83 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B020E1929DFDFE200EBBC83 /* ViewController.m */; };
+		9B020E1D29DFDFE200EBBC83 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B020E1B29DFDFE200EBBC83 /* Main.storyboard */; };
+		9B020E1F29DFDFE400EBBC83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B020E1E29DFDFE400EBBC83 /* Assets.xcassets */; };
+		9B020E2229DFDFE400EBBC83 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B020E2029DFDFE400EBBC83 /* LaunchScreen.storyboard */; };
+		9B020E2529DFDFE400EBBC83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B020E2429DFDFE400EBBC83 /* main.m */; };
+		9B020E2D29DFE12400EBBC83 /* EGBLEManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B020E2C29DFE12400EBBC83 /* EGBLEManager.m */; };
+		9B020E3229DFE35D00EBBC83 /* DataInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B020E3029DFE35D00EBBC83 /* DataInputStream.m */; };
+		9B020E3329DFE35D00EBBC83 /* DataOutputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B020E3129DFE35D00EBBC83 /* DataOutputStream.m */; };
+		9BC96EB929F0D821006D3629 /* EGBleCMDVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BC96EB729F0D821006D3629 /* EGBleCMDVC.m */; };
+		9BC96EBA29F0D821006D3629 /* EGBleCMDVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BC96EB829F0D821006D3629 /* EGBleCMDVC.xib */; };
+		9BE8D8B829E55C9800527D5C /* EGDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BE8D8B729E55C9800527D5C /* EGDevice.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3D45CFA4DC120B032AF455C0 /* Pods_HMPBleSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HMPBleSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E189A59C23502308CCA526B /* Pods-HMPBleSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HMPBleSDK.debug.xcconfig"; path = "Target Support Files/Pods-HMPBleSDK/Pods-HMPBleSDK.debug.xcconfig"; sourceTree = "<group>"; };
+		9B020E0F29DFDFE200EBBC83 /* HMPBleSDK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HMPBleSDK.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B020E1229DFDFE200EBBC83 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		9B020E1329DFDFE200EBBC83 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		9B020E1529DFDFE200EBBC83 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		9B020E1629DFDFE200EBBC83 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		9B020E1829DFDFE200EBBC83 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		9B020E1929DFDFE200EBBC83 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		9B020E1C29DFDFE200EBBC83 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		9B020E1E29DFDFE400EBBC83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9B020E2129DFDFE400EBBC83 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		9B020E2329DFDFE400EBBC83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9B020E2429DFDFE400EBBC83 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		9B020E2B29DFE12400EBBC83 /* EGBLEManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EGBLEManager.h; sourceTree = "<group>"; };
+		9B020E2C29DFE12400EBBC83 /* EGBLEManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EGBLEManager.m; sourceTree = "<group>"; };
+		9B020E2E29DFE35D00EBBC83 /* DataInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataInputStream.h; sourceTree = "<group>"; };
+		9B020E2F29DFE35D00EBBC83 /* DataOutputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataOutputStream.h; sourceTree = "<group>"; };
+		9B020E3029DFE35D00EBBC83 /* DataInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataInputStream.m; sourceTree = "<group>"; };
+		9B020E3129DFE35D00EBBC83 /* DataOutputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataOutputStream.m; sourceTree = "<group>"; };
+		9BC96EB629F0D821006D3629 /* EGBleCMDVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EGBleCMDVC.h; sourceTree = "<group>"; };
+		9BC96EB729F0D821006D3629 /* EGBleCMDVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EGBleCMDVC.m; sourceTree = "<group>"; };
+		9BC96EB829F0D821006D3629 /* EGBleCMDVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EGBleCMDVC.xib; sourceTree = "<group>"; };
+		9BE8D8B629E55C9800527D5C /* EGDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EGDevice.h; sourceTree = "<group>"; };
+		9BE8D8B729E55C9800527D5C /* EGDevice.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EGDevice.m; sourceTree = "<group>"; };
+		D2180B74B8E7DAE128B240BB /* Pods-HMPBleSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HMPBleSDK.release.xcconfig"; path = "Target Support Files/Pods-HMPBleSDK/Pods-HMPBleSDK.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9B020E0C29DFDFE200EBBC83 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48294424197C316B0AE5FF40 /* Pods_HMPBleSDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1AC995B8EC304837820155EA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3D45CFA4DC120B032AF455C0 /* Pods_HMPBleSDK.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2982FB09A7D06F769819B4D3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8E189A59C23502308CCA526B /* Pods-HMPBleSDK.debug.xcconfig */,
+				D2180B74B8E7DAE128B240BB /* Pods-HMPBleSDK.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		9B020E0629DFDFE200EBBC83 = {
+			isa = PBXGroup;
+			children = (
+				9B020E1129DFDFE200EBBC83 /* HMPBleSDK */,
+				9B020E1029DFDFE200EBBC83 /* Products */,
+				2982FB09A7D06F769819B4D3 /* Pods */,
+				1AC995B8EC304837820155EA /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		9B020E1029DFDFE200EBBC83 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9B020E0F29DFDFE200EBBC83 /* HMPBleSDK.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9B020E1129DFDFE200EBBC83 /* HMPBleSDK */ = {
+			isa = PBXGroup;
+			children = (
+				9B020E2E29DFE35D00EBBC83 /* DataInputStream.h */,
+				9B020E3029DFE35D00EBBC83 /* DataInputStream.m */,
+				9B020E2F29DFE35D00EBBC83 /* DataOutputStream.h */,
+				9B020E3129DFE35D00EBBC83 /* DataOutputStream.m */,
+				9B020E1229DFDFE200EBBC83 /* AppDelegate.h */,
+				9B020E1329DFDFE200EBBC83 /* AppDelegate.m */,
+				9B020E1529DFDFE200EBBC83 /* SceneDelegate.h */,
+				9B020E1629DFDFE200EBBC83 /* SceneDelegate.m */,
+				9B020E1829DFDFE200EBBC83 /* ViewController.h */,
+				9B020E1929DFDFE200EBBC83 /* ViewController.m */,
+				9BC96EB629F0D821006D3629 /* EGBleCMDVC.h */,
+				9BC96EB729F0D821006D3629 /* EGBleCMDVC.m */,
+				9BC96EB829F0D821006D3629 /* EGBleCMDVC.xib */,
+				9B020E2B29DFE12400EBBC83 /* EGBLEManager.h */,
+				9B020E2C29DFE12400EBBC83 /* EGBLEManager.m */,
+				9BE8D8B629E55C9800527D5C /* EGDevice.h */,
+				9BE8D8B729E55C9800527D5C /* EGDevice.m */,
+				9B020E1B29DFDFE200EBBC83 /* Main.storyboard */,
+				9B020E1E29DFDFE400EBBC83 /* Assets.xcassets */,
+				9B020E2029DFDFE400EBBC83 /* LaunchScreen.storyboard */,
+				9B020E2329DFDFE400EBBC83 /* Info.plist */,
+				9B020E2429DFDFE400EBBC83 /* main.m */,
+			);
+			path = HMPBleSDK;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9B020E0E29DFDFE200EBBC83 /* HMPBleSDK */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9B020E2829DFDFE400EBBC83 /* Build configuration list for PBXNativeTarget "HMPBleSDK" */;
+			buildPhases = (
+				CACC6326E43F98B7E5ECF4A5 /* [CP] Check Pods Manifest.lock */,
+				9B020E0B29DFDFE200EBBC83 /* Sources */,
+				9B020E0C29DFDFE200EBBC83 /* Frameworks */,
+				9B020E0D29DFDFE200EBBC83 /* Resources */,
+				F9F0334EDA0896E17A7593A0 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HMPBleSDK;
+			productName = HMPBleSDK;
+			productReference = 9B020E0F29DFDFE200EBBC83 /* HMPBleSDK.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9B020E0729DFDFE200EBBC83 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					9B020E0E29DFDFE200EBBC83 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+				};
+			};
+			buildConfigurationList = 9B020E0A29DFDFE200EBBC83 /* Build configuration list for PBXProject "HMPBleSDK" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 9B020E0629DFDFE200EBBC83;
+			productRefGroup = 9B020E1029DFDFE200EBBC83 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9B020E0E29DFDFE200EBBC83 /* HMPBleSDK */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9B020E0D29DFDFE200EBBC83 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B020E2229DFDFE400EBBC83 /* LaunchScreen.storyboard in Resources */,
+				9B020E1F29DFDFE400EBBC83 /* Assets.xcassets in Resources */,
+				9B020E1D29DFDFE200EBBC83 /* Main.storyboard in Resources */,
+				9BC96EBA29F0D821006D3629 /* EGBleCMDVC.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CACC6326E43F98B7E5ECF4A5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HMPBleSDK-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F9F0334EDA0896E17A7593A0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HMPBleSDK/Pods-HMPBleSDK-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HMPBleSDK/Pods-HMPBleSDK-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HMPBleSDK/Pods-HMPBleSDK-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9B020E0B29DFDFE200EBBC83 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B020E1A29DFDFE200EBBC83 /* ViewController.m in Sources */,
+				9B020E1429DFDFE200EBBC83 /* AppDelegate.m in Sources */,
+				9B020E2529DFDFE400EBBC83 /* main.m in Sources */,
+				9BE8D8B829E55C9800527D5C /* EGDevice.m in Sources */,
+				9BC96EB929F0D821006D3629 /* EGBleCMDVC.m in Sources */,
+				9B020E1729DFDFE200EBBC83 /* SceneDelegate.m in Sources */,
+				9B020E3229DFE35D00EBBC83 /* DataInputStream.m in Sources */,
+				9B020E3329DFE35D00EBBC83 /* DataOutputStream.m in Sources */,
+				9B020E2D29DFE12400EBBC83 /* EGBLEManager.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		9B020E1B29DFDFE200EBBC83 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9B020E1C29DFDFE200EBBC83 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		9B020E2029DFDFE400EBBC83 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9B020E2129DFDFE400EBBC83 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		9B020E2629DFDFE400EBBC83 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		9B020E2729DFDFE400EBBC83 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9B020E2929DFDFE400EBBC83 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8E189A59C23502308CCA526B /* Pods-HMPBleSDK.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N9STZB3GQH;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HMPBleSDK/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eaglenos.hmpsdk.HMPBleSDK;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9B020E2A29DFDFE400EBBC83 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D2180B74B8E7DAE128B240BB /* Pods-HMPBleSDK.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N9STZB3GQH;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HMPBleSDK/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.eaglenos.hmpsdk.HMPBleSDK;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9B020E0A29DFDFE200EBBC83 /* Build configuration list for PBXProject "HMPBleSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9B020E2629DFDFE400EBBC83 /* Debug */,
+				9B020E2729DFDFE400EBBC83 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9B020E2829DFDFE400EBBC83 /* Build configuration list for PBXNativeTarget "HMPBleSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9B020E2929DFDFE400EBBC83 /* Debug */,
+				9B020E2A29DFDFE400EBBC83 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9B020E0729DFDFE200EBBC83 /* Project object */;
+}
