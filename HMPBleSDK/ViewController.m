@@ -13,7 +13,7 @@
 #import "ViewController.h"
 #import "EGBLEManager.h"
 #import "EGBleCMDVC.h"
-@interface ViewController ()<UITableViewDelegate, UITableViewDataSource, EGBleManagerDelegate>
+@interface ViewController ()<UITableViewDelegate, UITableViewDataSource, EGBLEDeviceDelegate>
 /// 列表视图
 @property (nonatomic, strong) UITableView *tableView;
 /// 数据源
@@ -32,7 +32,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"蓝牙调试";
-    [EGBLEManager sharedInstance].deleagte = self;
+    [EGBLEManager sharedInstance].deviceDeleagte = self;
     self.dataSource = @[
         @[@"开始扫描",@"断开连接"],
 //        @[@"发送连接指令",@"发送打开通知指令",@"查询信息指令（尿酸）",@"上报血糖数据",@"设置数据命令",@"查询血糖最新记录id值",@"查询尿酸最新记录id值",@"查询乳酸最新记录id值",@"查询血酮最新记录id值",@"查询最新的血糖数据",@"查询最新的尿酸数据",@"查询指定id的血糖数据",@"查询指定id的尿酸数据",@"查询指定区间的血糖数据",@"查询指定区间的尿酸数据",@"查询指定区间的血糖数据批量",@"查询指定区间的尿酸数据批量"]
@@ -52,6 +52,18 @@
     [self.deviceArray addObject:device];
     [self.tableView reloadData];
 }
+
+- (void)didConnectedDevice:(nonnull EGDevice *)device {
+    [self.deviceArray removeAllObjects];
+    EGBleCMDVC *vc = [[EGBleCMDVC alloc]init];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+
+- (void)didDisconnectedDevice:(nonnull EGDevice *)device andError:(nonnull NSError *)error {
+    NSLog(@"连接失败");
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     if (indexPath.section > 0 && self.deviceArray.count > indexPath.row) {
@@ -79,14 +91,7 @@
     if (indexPath.section > 0) {
         EGDevice *device = self.deviceArray[indexPath.row];
         __weak __typeof(self) weakSelf = self;
-        [[EGBLEManager sharedInstance]connectToDevice:device Result:^(BOOL isSuccess, NSError * _Nullable error) {
-            [weakSelf.deviceArray removeAllObjects];
-                DLog(@"连接状态：%d",isSuccess);
-            EGBleCMDVC *vc = [[EGBleCMDVC alloc]init];
-            [weakSelf.navigationController pushViewController:vc animated:YES];
-//            vc.modalPresentationStyle = UIModalPresentationFullScreen;
-//            [weakSelf presentViewController:vc animated:YES completion:nil];
-        }];
+        [[EGBLEManager sharedInstance]connectToDevice:device];
         return;
     }
     NSArray *child = self.dataSource[indexPath.section];
@@ -130,7 +135,7 @@
     } else if ([title isEqualToString:@"查询指定区间的尿酸数据批量"]) {
         [[EGBLEManager sharedInstance] sendIntervalUricBatchCmd];
     }else{
-
+        
     }
 }
 

@@ -18,14 +18,18 @@ typedef NS_ENUM(NSInteger, EGDeviceValueType) {
     EGDeviceValueType_GLU = 0x02,//血糖
     EGDeviceValueType_KET = 0x03,//血酮
     EGDeviceValueType_URI = 0x04,//尿酸
+    EGDeviceValueType_HB = 0x05,//尿酸
     EGDeviceValueType_TC = 0x06,//总胆固醇
     EGDeviceValueType_LAC = 0x07,//乳酸
 };
-@protocol EGBleManagerDelegate <NSObject>
-//发现设备
-- (void)didDiscoverDevice:(EGDevice *)device;
 
-//连接中断
+@protocol EGBLEDeviceDelegate <NSObject>
+/// 发现设备
+- (void)didDiscoverDevice:(EGDevice *)device;
+///连接成功
+/// - Parameter device: device
+- (void)didConnectedDevice:(EGDevice *)device;
+///连接断开
 - (void)didDisconnectedDevice:(EGDevice *)device andError:(NSError *)error;
 @end
 typedef void (^connectedReslut)(BOOL isSuccess, NSError * _Nullable error);
@@ -33,7 +37,7 @@ typedef void (^connectedReslut)(BOOL isSuccess, NSError * _Nullable error);
 
 @property (nonatomic, assign) EGDeviceConnectStatus conntectStatus;
 @property (nonatomic, assign) EGDeviceValueType valueType;
-@property (nonatomic, assign) id <EGBleManagerDelegate> deleagte;
+@property (nonatomic, assign) id <EGBLEDeviceDelegate> deviceDeleagte;
 /// 是否自动重连
 @property (nonatomic, assign) BOOL isAutoReconnect;
 /// 单例
@@ -42,7 +46,7 @@ typedef void (^connectedReslut)(BOOL isSuccess, NSError * _Nullable error);
 
 /// 连接设备
 /// - Parameter device: device
-- (void)connectToDevice:(EGDevice *)device Result:(connectedReslut)result;
+- (void)connectToDevice:(EGDevice *)device;
 
 
 /// 开始扫描

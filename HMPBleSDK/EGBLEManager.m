@@ -198,6 +198,16 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
 //蓝牙网关初始化和委托方法设置
 -(void)babyDelegate{
     __weak __typeof(self) weakSelf = self;
+    //过滤器
+    //设置查找设备的过滤器
+    [self.ble setFilterOnDiscoverPeripherals:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
+        return [peripheralName hasPrefix:@"Eaglenos"];
+    }];
+    //链接设备的过滤器
+    [self.ble setFilterOnConnectToPeripherals:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
+        return [peripheralName hasPrefix:@"Eaglenos"];
+    }];
+    
     //设置扫描到设备的委托
     [self.ble setBlockOnDiscoverToPeripherals:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
         if ([advertisementData.allKeys containsObject:@"kCBAdvDataManufacturerData"]) {
@@ -219,8 +229,8 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
             NSData *data = [advertisementData objectForKey:@"kCBAdvDataManufacturerData"];
             SN = [weakSelf translateSN:[weakSelf dataToDecimalStringArray:data]];
             EGDevice *device = [[EGDevice alloc]initWithPeripheral:peripheral adv:advertisementData sn:SN deviceType:deviceType];
-            if (weakSelf.deleagte && [weakSelf.deleagte respondsToSelector:@selector(didDiscoverDevice:)]) {
-                [weakSelf.deleagte didDiscoverDevice:device];
+            if (weakSelf.deviceDeleagte && [weakSelf.deviceDeleagte respondsToSelector:@selector(didDiscoverDevice:)]) {
+                [weakSelf.deviceDeleagte didDiscoverDevice:device];
             }
         }
 //
@@ -229,13 +239,13 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     //断开连接
     [self.ble setBlockOnDisconnect:^(CBCentralManager *central, CBPeripheral *peripheral, NSError *error) {
         weakSelf.conntectStatus = EGDeviceDisConnected;
-        if (weakSelf.deleagte && [weakSelf.deleagte respondsToSelector:@selector(didDisconnectedDevice:andError:)]) {
-            [weakSelf.deleagte didDisconnectedDevice:weakSelf.currentDevice andError:error];
+        if (weakSelf.deviceDeleagte && [weakSelf.deviceDeleagte respondsToSelector:@selector(didDisconnectedDevice:andError:)]) {
+            [weakSelf.deviceDeleagte didDisconnectedDevice:weakSelf.currentDevice andError:error];
         }
         if (error) {
             DLog(@"failed to connect : %@, (%@)", peripheral, error.localizedDescription);
             if (weakSelf.isAutoReconnect){
-                [weakSelf connectToDevice:weakSelf.currentDevice Result:nil];
+                [weakSelf connectToDevice:weakSelf.currentDevice];
             }
         }
     }];
@@ -285,23 +295,16 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
         NSLog(@"%@设备的  Descriptor name:%@ value is:%@",peripheral.name, descriptor.characteristic.UUID, descriptor.value);
     }];
 
-    //过滤器
-    //设置查找设备的过滤器
-    [self.ble setFilterOnDiscoverPeripherals:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
-        return [peripheralName hasPrefix:@"Eaglenos"];
-    }];
-    //链接设备的过滤器
-    [self.ble setFilterOnConnectToPeripherals:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
-        return [peripheralName hasPrefix:@"Eaglenos"];
-    }];
     
     [self.ble setBlockOnDidWriteValueForCharacteristic:^(CBCharacteristic *characteristic, NSError *error) {
         NSLog(@"setBlockOnDidWriteValueForCharacteristicAtChannel characteristic:%@ and new value:%@",characteristic.UUID, characteristic.value);
     }];
     
 }
-- (void)connectToDevice:(EGDevice *)device Result:(connectedReslut)result{
+#pragma mark 开始连接
+- (void)connectToDevice:(EGDevice *)device{
     if (device) {
+        self.conntectStatus = EGDeviceConnecting;
         CBPeripheral *per = device.rawPeripheral;
         [self.ble cancelScan];
         self.ble.having(per).connectToPeripherals().discoverServices().discoverCharacteristics().readValueForCharacteristic().discoverDescriptorsForCharacteristic().readValueForDescriptors().begin();
@@ -311,12 +314,18 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
         [self.ble setBlockOnConnected:^(CBCentralManager *central, CBPeripheral *peripheral) {
             NSLog(@"设备：%@--连接成功",peripheral.name);
             weakSelf.conntectStatus = EGDeviceConnected;
-            weakSelf.currentDevice = device;
-            result(YES, nil);
+            if(weakSelf.deviceDeleagte && [weakSelf.deviceDeleagte respondsToSelector:@selector(didConnectedDevice:)]) {
+                [weakSelf.deviceDeleagte didConnectedDevice:device];
+                weakSelf.currentDevice = device;
+            }
         }];
+        //连接失败
         [self.ble setBlockOnFailToConnect:^(CBCentralManager *central, CBPeripheral *peripheral, NSError *error) {
             NSLog(@"设备：%@--连接失败",peripheral.name);
-            result(NO, error);
+            weakSelf.conntectStatus = EGDeviceDisConnected;
+            if(weakSelf.deviceDeleagte && [weakSelf.deviceDeleagte respondsToSelector:@selector(didDisconnectedDevice:andError:)]) {
+                [weakSelf.deviceDeleagte didDisconnectedDevice:device andError:error];
+            }
         }];
     }
 }
@@ -324,15 +333,12 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
 /// 开始扫描
 - (void)startScan {
     self.ble.scanForPeripherals().begin();
-    self.conntectStatus = EGDeviceConnecting;
 }
 #pragma mark 断开连接
 /// 断开链接
 - (void)stopConnect {
     self.ble.stop(0);
 }
-
-
 
 #pragma mark 发送指令
 /// 3.1 3.2 3.5 3.8 3.9
