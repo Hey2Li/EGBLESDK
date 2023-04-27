@@ -29,6 +29,8 @@
 @property (nonatomic, strong) EGDevice *currentDevice;
 /// 最近50条数据
 @property (nonatomic, strong) NSMutableArray *latestData;
+
+/// 最新的数据ID
 @property (nonatomic, assign) int lastId;
 @end
 
@@ -53,6 +55,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     }
     return self;
 }
+
 - (NSMutableArray *)latestData {
     if (!_latestData) {
         _latestData = [NSMutableArray array];
@@ -201,11 +204,11 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     //过滤器
     //设置查找设备的过滤器
     [self.ble setFilterOnDiscoverPeripherals:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
-        return [peripheralName hasPrefix:@"Eaglenos"];
+        return [peripheralName hasPrefix:kPreName];
     }];
     //链接设备的过滤器
     [self.ble setFilterOnConnectToPeripherals:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
-        return [peripheralName hasPrefix:@"Eaglenos"];
+        return [peripheralName hasPrefix:kPreName];
     }];
     
     //设置扫描到设备的委托
@@ -620,8 +623,8 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
 - (void)parseData:(NSData *)data {
     NSArray *result = [self convertNSDataToDecimalArray:data];
 //    NSLog(@"收到指令：%@, 原始值：%@", data,result);
-    NSLog(@"收到指令：%@", data);
-    if (!data || data.length < 3) {
+//    NSLog(@"收到指令：%@", data);
+    if (!data || data.length < 10) {
         return;
     }
     NSData *preData = [data subdataWithRange:NSMakeRange(0, 2)];
@@ -630,6 +633,10 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
 //    if (pre != 0xEB90) {
 //        return;
 //    }
+    //type
+    NSData *typeData = [data subdataWithRange:NSMakeRange(5, 1)];
+    DataInputStream *typeStream = [[DataInputStream alloc] initWithData:typeData];
+    EGDeviceValueType type = typeStream.readChar;
     
     NSData *cmdData = [data subdataWithRange:NSMakeRange(4, 1)];
     DataInputStream *cmdStream = [[DataInputStream alloc] initWithData:cmdData];
@@ -647,37 +654,44 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
             NSLog(@"监听的转换值：%@", [self convertNSDataToDecimalArray:data]);
         case 0x08:
             [self parseSettingCallbackInfo:data];
-//        case 0x14:
-           
         default:
             if ([result[4] intValue] == 20 && [result[0] intValue] == 235 && [result[1] intValue] == 144) {
                 //判断开头
                 [self.latestData addObjectsFromArray:result];
             }else if ([result[0]intValue] != 235 && [result[1]intValue] != 144) {
                 [self.latestData addObjectsFromArray:result];
+                NSData *typeData = [data subdataWithRange:NSMakeRange(5, 1)];
+                DataInputStream *typeStream = [[DataInputStream alloc] initWithData:typeData];
+                type = typeStream.readChar;
             }
             BOOL isPackpageOK = false;
             if(self.latestData.count > 12){
                 if ([self.latestData[5]intValue] == 2 && (self.latestData.count - 12) % 11 == 0) {
                     isPackpageOK = true;
-                }else if ([self.latestData[5] intValue] != 02 && (self.latestData.count - 12) % 11 == 0) {
+                }else if ([self.latestData[5] intValue] != 02 && (self.latestData.count - 12) % 10 == 0) {
                     isPackpageOK = true;
                 }
             }
             if (self.latestData.count > 2 && [self.latestData[self.latestData.count - 2] intValue] == 13
                 && [self.latestData.lastObject intValue] == 10 && isPackpageOK) {
                 // 翻译
-                //syncDataBeans.addAll(parseSyncDataToSyncDataBean(latest50Value, itemType));
-                [self convertDataToArray:self.latestData type:EGDeviceValueType_GLU];
+                [self convertDataToArray:self.latestData type:type];
 //                NSLog(@"最近50条数据为：%@", self.latestData);
                 [self.latestData removeAllObjects];
             }
+
             break;
     }
 }
+
+/// 解析为数据数组
+/// - Parameters:
+///   - data: 蓝牙二进制
+///   - type: 数据类型
 - (NSArray *)convertDataToArray:(NSArray *)data type:(EGDeviceValueType)type{
     NSMutableArray *rs = [NSMutableArray array];
     switch (type) {
+            //血糖
         case EGDeviceValueType_GLU:
             if ([data[0] shortValue] == 0xEB && [data[1] shortValue] == 0x90 && [data[4] shortValue] == 0x14 && [data[5] shortValue] == 0x02) {
                 int num = [data[6] intValue];
@@ -692,7 +706,20 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
                 }
             }
             break;
-            
+        case  EGDeviceValueType_LAC:
+            //乳酸
+            if ([data[0] shortValue] == 0xEB && [data[1] shortValue] == 0x90 && [data[4] shortValue] == 0x14 && ([data[5] shortValue] == 0x03 || [data[5] shortValue] == 0x04 || [data[5] shortValue] == 0x07)) {
+                int num = [data[6] intValue];
+                int start = 7;
+                if (num > 0) {
+                    for (int i = 1; i <= num; i++) {
+                        int end = start + 10;
+                        NSArray *tmpArray = [data subarrayWithRange:NSMakeRange(start, 11)];
+                        [rs addObject:[self parseDataWithArray:tmpArray]];
+                        start = end;
+                    }
+                }
+            }
         default:
             break;
     }
@@ -874,7 +901,38 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
                 uint16_t lastId = lastIdStream.readShort;
                 content = [content stringByAppendingFormat:@"\n最新id信息:%d",lastId];
             }
-        }break;
+        }
+            break;
+        case EGDeviceValueType_LAC:{
+            cmdType = @"乳酸";
+            if (len == 0x15) {
+                // 查询乳酸指定记录id值
+                content = [content stringByAppendingFormat:@"查询乳酸指定记录id：%@", [self parseUricId:[data subdataWithRange:NSMakeRange(6, 12)]]];
+            } else if (len == 0x0d){
+                content = @"查询尿酸最新记录:";
+                // 指标个数
+                NSData *countData = [data subdataWithRange:NSMakeRange(6, 2)];
+                DataInputStream *countStream = [[DataInputStream alloc] initWithData:countData];
+                uint16_t count = countStream.readShort;
+                content = [content stringByAppendingFormat:@"\n指标个数:%d",count];
+                // 最新id信息
+                NSData *lastIdData = [data subdataWithRange:NSMakeRange(8, 2)];
+                DataInputStream *lastIdStream = [[DataInputStream alloc] initWithData:lastIdData];
+                uint16_t lastId = lastIdStream.readShort;
+                content = [content stringByAppendingFormat:@"\n最新id信息:%d",lastId];
+                
+                //查询最近50条数据
+                int total = 0;
+                if (lastId < 50) {
+                    total = lastId;
+                }
+                if (lastId == 0) {
+                    NSLog(@"无数据");
+                }
+                [self.latestData removeAllObjects];
+                [self queryLasted50Value:EGDeviceValueType_LAC lastId:lastId];
+            }
+        }
         default:
             break;
     }
@@ -894,6 +952,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     NSLog(@"收到%@指令：\n起始位: %d \n长度:%d \n命令格式:%d \n数据命令格式:%d \n具体数据:%@ \nack:%d \n校验位:%d \n结束位:%d",cmdType,pre, len, cmd, dataCmd, content, ack, xor, end);
 }
 - (void)queryLasted50Value:(EGDeviceValueType)valueType lastId:(int)lastId {
+    
     int firstId = 1;
     if (lastId > 50) {
         firstId = lastId - 49;
@@ -1745,9 +1804,9 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     NSLog(@"收到设备设置指令：\n起始位: %d \n长度:%d \n命令格式:%d \n指标命令格式:%d \n数据格式:%d  \nack:%d \n校验位:%d \n结束位:%d",pre, len, cmd, dataCmd, dataCmdResult,ack, xor, end);
     
 //    UIAlertController *alert  = [UIAlertController alertControllerWithTitle:@"提示" message:[NSString stringWithFormat:@"修改设备时间%@", dataCmdResult == 0x01 ? @"成功" : @"失败"] preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertController *alert  = [UIAlertController alertControllerWithTitle:@"提示" message:[NSString stringWithFormat:@"收到设备设置指令：\n起始位: %d \n长度:%d \n命令格式:%d \n指标命令格式:%d \n数据格式:%d  \nack:%d \n校验位:%d \n结束位:%d",pre, len, cmd, dataCmd, dataCmdResult,ack, xor, end] preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleCancel handler:nil]];
-    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+//    UIAlertController *alert  = [UIAlertController alertControllerWithTitle:@"提示" message:[NSString stringWithFormat:@"收到设备设置指令：\n起始位: %d \n长度:%d \n命令格式:%d \n指标命令格式:%d \n数据格式:%d  \nack:%d \n校验位:%d \n结束位:%d",pre, len, cmd, dataCmd, dataCmdResult,ack, xor, end] preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleCancel handler:nil]];
+//    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 @end

@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, EGDeviceValueType) {
     EGDeviceValueType_TC = 0x06,//总胆固醇
     EGDeviceValueType_LAC = 0x07,//乳酸
 };
-
+#define kPreName @"Eaglenos"
 @protocol EGBLEDeviceDelegate <NSObject>
 /// 发现设备
 - (void)didDiscoverDevice:(EGDevice *)device;
