@@ -22,8 +22,13 @@
 @property (nonatomic, strong) CBPeripheral *periphearal;
 /// 写特征
 @property (nonatomic, strong) CBCharacteristic *writeCharacteristic;
+/// 写特征字典
+@property (nonatomic, strong) NSMutableDictionary<NSString *, CBCharacteristic *> *writeCharactDict;
 /// 订阅特征
 @property (nonatomic, strong) CBCharacteristic *notifyCharacteristic;
+
+/// 订阅特征字典
+@property (nonatomic, strong) NSMutableDictionary<NSString *, CBCharacteristic *> *notifyCharactDict;
 
 /// 当前连接的设备
 @property (nonatomic, strong) EGDevice *currentDevice;
@@ -56,6 +61,18 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     return self;
 }
 
+-(NSMutableDictionary<NSString *,CBCharacteristic *> *)writeCharactDict{
+    if (!_writeCharactDict) {
+        _writeCharactDict = [NSMutableDictionary dictionary];
+    }
+    return  _writeCharactDict;
+}
+- (NSMutableDictionary<NSString *,CBCharacteristic *> *)notifyCharactDict{
+    if (!_notifyCharactDict) {
+        _notifyCharactDict = [NSMutableDictionary dictionary];
+    }
+    return _notifyCharactDict;
+}
 - (NSMutableArray *)latestData {
     if (!_latestData) {
         _latestData = [NSMutableArray array];
@@ -258,36 +275,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
             NSLog(@"搜索到%@设备的服务:%@",peripheral.name, service.UUID.UUIDString);
         }
     }];
-    //设置发现设service的Characteristics的委托
-    [self.ble setBlockOnDiscoverCharacteristics:^(CBPeripheral *peripheral, CBService *service, NSError *error) {
-        NSLog(@"=== %@设备的 service name:%@",peripheral.name,service.UUID);
-        if ([service.UUID.UUIDString.uppercaseString containsString:@"8653000A"]) {
-            for (CBCharacteristic *c in service.characteristics) {
-                NSLog(@"=== charateristic name is :%@",c.UUID.UUIDString);
-                if (c.properties == CBCharacteristicPropertyWrite) {
-                    weakSelf.writeCharacteristic = c;
-                }
-                if (c.properties == CBCharacteristicPropertyNotify) {
-                    weakSelf.notifyCharacteristic = c;
-                }
-            }
-        }
-    }];
-    //设置读取characteristics的委托
-    [self.ble setBlockOnReadValueForCharacteristic:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
-        if ([characteristics.UUID.UUIDString hasPrefix:@"8653000C"] && !weakSelf.writeCharacteristic) {
-            weakSelf.writeCharacteristic = characteristics;
-        } else if ([characteristics.UUID.UUIDString hasPrefix:@"8653000B"] && !characteristics.isNotifying) {
-            [peripheral setNotifyValue:true forCharacteristic:characteristics];
-            weakSelf.notifyCharacteristic = characteristics;
-        }
-        [peripheral setNotifyValue:true forCharacteristic:characteristics];
-        NSLog(@"=== characteristic name:%@ value is:%@",characteristics.UUID,characteristics.value);
-        [weakSelf.ble notify:weakSelf.periphearal characteristic:weakSelf.notifyCharacteristic block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
-            DLog(@"订阅收到的值：%@",characteristics.value);
-            [weakSelf parseData:characteristics.value];
-        }];
-    }];
+  
     // 写Characteristic成功后的block
     [self.ble setBlockOnDidWriteValueForCharacteristic:^(CBCharacteristic *characteristic, NSError *error) {
         DLog(@"写Characteristic成功:characteristic:%@ //value:%@", characteristic.UUID,characteristic.value);
@@ -329,6 +317,41 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
             if(weakSelf.deviceDeleagte && [weakSelf.deviceDeleagte respondsToSelector:@selector(didDisconnectedDevice:andError:)]) {
                 [weakSelf.deviceDeleagte didDisconnectedDevice:device andError:error];
             }
+        }];
+        
+        //设置发现设service的Characteristics的委托
+        [self.ble setBlockOnDiscoverCharacteristics:^(CBPeripheral *peripheral, CBService *service, NSError *error) {
+            NSLog(@"=== %@设备的 service name:%@",peripheral.name,service.UUID);
+            if ([service.UUID.UUIDString.uppercaseString containsString:@"8653000A"]) {
+                for (CBCharacteristic *c in service.characteristics) {
+                    NSLog(@"=== charateristic name is :%@",c.UUID.UUIDString);
+                    if (c.properties == CBCharacteristicPropertyWrite) {
+//                        weakSelf.writeCharacteristic = c;
+                        weakSelf.writeCharactDict[device.sn] = c;
+                    }
+                    if (c.properties == CBCharacteristicPropertyNotify) {
+//                        weakSelf.notifyCharacteristic = c;
+                        weakSelf.notifyCharactDict[device.sn] = c;
+                    }
+                }
+            }
+        }];
+        //设置读取characteristics的委托
+        [self.ble setBlockOnReadValueForCharacteristic:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
+            if ([characteristics.UUID.UUIDString hasPrefix:@"8653000C"]) {
+//                weakSelf.writeCharacteristic = characteristics;
+                weakSelf.writeCharactDict[device.sn] = characteristics;
+            } else if ([characteristics.UUID.UUIDString hasPrefix:@"8653000B"] && !characteristics.isNotifying) {
+                [peripheral setNotifyValue:true forCharacteristic:characteristics];
+//                weakSelf.notifyCharacteristic = characteristics;
+                weakSelf.notifyCharactDict[device.sn] = characteristics;
+            }
+            [peripheral setNotifyValue:true forCharacteristic:characteristics];
+            NSLog(@"=== characteristic name:%@ value is:%@",characteristics.UUID,characteristics.value);
+            [weakSelf.ble notify:weakSelf.periphearal characteristic:weakSelf.notifyCharactDict[device.sn] block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
+                DLog(@"订阅收到的值：%@",characteristics.value);
+                [weakSelf parseData:characteristics.value];
+            }];
         }];
     }
 }
@@ -386,7 +409,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"发送连接指令: %@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 
 
@@ -438,8 +461,8 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"发送查询尿酸最新ID指令：%@",data);
-    [self sendCmd:data];
-    
+    [self sendCmd:data toDevice:self.currentDevice];
+
 }
 
 
@@ -526,7 +549,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"发送数据上报指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 
 
@@ -599,18 +622,17 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"发送设置硬件版本号指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 
-- (void)sendCmd:(NSData *)data {
-    if (!data || !self.periphearal || !self.writeCharacteristic) {
+- (void)sendCmd:(NSData *)data toDevice:(EGDevice *)device {
+    if (!data || !device.rawPeripheral || ![self.writeCharactDict.allKeys containsObject:device.sn]) {
         return;
     }
-    [self.periphearal writeValue:data forCharacteristic:self.writeCharacteristic type:CBCharacteristicWriteWithResponse];
+    [device.rawPeripheral writeValue:data forCharacteristic:self.writeCharactDict[device.sn] type:CBCharacteristicWriteWithResponse];
 }
 
 
-#pragma mark 接收指令
 - (NSArray *)convertNSDataToDecimalArray:(NSData *)data {
     NSMutableArray *array = [NSMutableArray array];
     const unsigned char *bytes = (const unsigned char *)[data bytes];
@@ -620,6 +642,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     }
     return [NSArray arrayWithArray:array];
 }
+#pragma mark 接收指令
 - (void)parseData:(NSData *)data {
     NSArray *result = [self convertNSDataToDecimalArray:data];
 //    NSLog(@"收到指令：%@, 原始值：%@", data,result);
@@ -706,6 +729,8 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
                 }
             }
             break;
+        case EGDeviceValueType_URI:
+        case EGDeviceValueType_KET:
         case  EGDeviceValueType_LAC:
             //乳酸
             if ([data[0] shortValue] == 0xEB && [data[1] shortValue] == 0x90 && [data[4] shortValue] == 0x14 && ([data[5] shortValue] == 0x03 || [data[5] shortValue] == 0x04 || [data[5] shortValue] == 0x07)) {
@@ -810,7 +835,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
-
+#pragma mark 查询信息返回命令
 /// 查询信息返回命令(只实现尿酸)
 /// @param data 数据
 -(void)parseInfoCallbackInfo:(NSData *)data {
@@ -867,14 +892,6 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
                 content = [content stringByAppendingFormat:@"\n最新id信息:%d",lastId];
                 
                 //查询最近50条数据
-                int total = 0;
-                if (lastId < 50) {
-                    total = lastId;
-                }
-                if (lastId == 0) {
-                    NSLog(@"无数据");
-                }
-                [self.latestData removeAllObjects];
                 [self queryLasted50Value:EGDeviceValueType_GLU lastId:lastId];
             }
         }break;
@@ -900,6 +917,8 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
                 DataInputStream *lastIdStream = [[DataInputStream alloc] initWithData:lastIdData];
                 uint16_t lastId = lastIdStream.readShort;
                 content = [content stringByAppendingFormat:@"\n最新id信息:%d",lastId];
+                //查询最近50条数据
+                [self queryLasted50Value:EGDeviceValueType_URI lastId:lastId];
             }
         }
             break;
@@ -922,14 +941,6 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
                 content = [content stringByAppendingFormat:@"\n最新id信息:%d",lastId];
                 
                 //查询最近50条数据
-                int total = 0;
-                if (lastId < 50) {
-                    total = lastId;
-                }
-                if (lastId == 0) {
-                    NSLog(@"无数据");
-                }
-                [self.latestData removeAllObjects];
                 [self queryLasted50Value:EGDeviceValueType_LAC lastId:lastId];
             }
         }
@@ -952,15 +963,23 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     NSLog(@"收到%@指令：\n起始位: %d \n长度:%d \n命令格式:%d \n数据命令格式:%d \n具体数据:%@ \nack:%d \n校验位:%d \n结束位:%d",cmdType,pre, len, cmd, dataCmd, content, ack, xor, end);
 }
 - (void)queryLasted50Value:(EGDeviceValueType)valueType lastId:(int)lastId {
+    [self.latestData removeAllObjects];
+    int total = 0;
+    if (lastId <= 50) {
+        total = lastId;
+    }
+    if (lastId == 0) {
+        NSLog(@"无数据");
+    }
     
     int firstId = 1;
     if (lastId > 50) {
         firstId = lastId - 49;
     }
-//    int id1 = firstId >> 8; // 取高位
-//    int id2 = firstId & 0xff; // 取低位
-//    int id3 = lastId >> 8; // 取高位
-//    int id4 = lastId & 0xff; // 取低位
+    int id1 = firstId >> 8; // 取高位
+    int id2 = firstId & 0xff; // 取低位
+    int id3 = lastId >> 8; // 取高位
+    int id4 = lastId & 0xff; // 取低位
     //sendCmd
     DataOutputStream *stream = [[DataOutputStream alloc] init];
     // 起始位
@@ -973,12 +992,12 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     // 项目命令字（血糖）
     Byte type = valueType;
     // 检测id 0x0000表示最新
-    Byte id1 = 0x00;
-    Byte id2 = 0x01;
-
-    //
-    Byte id3 = 0x00;
-    Byte id4 = 0x1A;
+//    Byte id1 = 0x00;
+//    Byte id2 = 0x01;
+//
+//    //
+//    Byte id3 = 0x00;
+//    Byte id4 = 0x1A;
     // ack
     Byte ack = 0x01;
     // 校验码
@@ -1009,7 +1028,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"获取最近50条数据：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 ///获取血糖最新的数据记录的id值
 ///app---dev
@@ -1060,7 +1079,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
 //    EB90000B0202000001018b0D0A
     NSData *data = [stream toByteArray];
     NSLog(@"发送数据上报指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 
 ///获取尿酸最新的数据记录的id值
@@ -1111,7 +1130,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"发送数据上报指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 
 ///获取乳酸最新的数据记录的id值
@@ -1161,7 +1180,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"发送数据上报指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 ///获取血酮最新的数据记录的id值
 //////app---dev
@@ -1210,7 +1229,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"发送数据上报指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 ///查询最新的血糖值
 - (void)sendLastedGluCmd{
@@ -1255,7 +1274,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
 
     NSData *data = [stream toByteArray];
     NSLog(@"发送数据上报指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 
 ///查询最新的尿酸值
@@ -1301,7 +1320,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
 
     NSData *data = [stream toByteArray];
     NSLog(@"发送数据上报指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 
 ///查询指定id的血糖数据
@@ -1354,7 +1373,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"发送数据上报指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 
 ///查询指定Id的尿酸数据
@@ -1400,7 +1419,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"发送数据上报指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 
 ///查询指定区间的血糖数据 多次返回
@@ -1456,7 +1475,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"发送数据上报指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 ///查询指定区间的尿酸数据
 - (void)sendIntervalUricCmd{
@@ -1506,7 +1525,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"发送数据上报指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 
 ///查询指定区间的血糖数据批量 一次返回
@@ -1562,7 +1581,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"发送数据上报指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 
 ///查询指定区间的尿酸数据批量
@@ -1613,7 +1632,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"发送数据上报指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 ///打开通知命令
 - (void)sendNotifyCmd{
@@ -1663,7 +1682,7 @@ const NSTimeInterval oneYearInSeconds = 365 * 24 * 60 * 60;
     
     NSData *data = [stream toByteArray];
     NSLog(@"发送数据上报指令：%@",data);
-    [self sendCmd:data];
+    [self sendCmd:data toDevice:self.currentDevice];
 }
 #pragma  mark -解析获取指定id血糖值
 /// 解析获取指定id血糖值
