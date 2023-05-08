@@ -15,12 +15,11 @@
 		9B020E1F29DFDFE400EBBC83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B020E1E29DFDFE400EBBC83 /* Assets.xcassets */; };
 		9B020E2229DFDFE400EBBC83 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B020E2029DFDFE400EBBC83 /* LaunchScreen.storyboard */; };
 		9B020E2529DFDFE400EBBC83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B020E2429DFDFE400EBBC83 /* main.m */; };
-		9B020E2D29DFE12400EBBC83 /* EGBLEManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B020E2C29DFE12400EBBC83 /* EGBLEManager.m */; };
 		9B020E3229DFE35D00EBBC83 /* DataInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B020E3029DFE35D00EBBC83 /* DataInputStream.m */; };
 		9B020E3329DFE35D00EBBC83 /* DataOutputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B020E3129DFE35D00EBBC83 /* DataOutputStream.m */; };
 		9BC96EB929F0D821006D3629 /* EGBleCMDVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BC96EB729F0D821006D3629 /* EGBleCMDVC.m */; };
 		9BC96EBA29F0D821006D3629 /* EGBleCMDVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BC96EB829F0D821006D3629 /* EGBleCMDVC.xib */; };
-		9BE8D8B829E55C9800527D5C /* EGDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BE8D8B729E55C9800527D5C /* EGDevice.m */; };
+		9BDAF2182A08EF9A0062D8B1 /* EGTestStripBleSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDAF2172A08EF9A0062D8B1 /* EGTestStripBleSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,8 +37,6 @@
 		9B020E2129DFDFE400EBBC83 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9B020E2329DFDFE400EBBC83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B020E2429DFDFE400EBBC83 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		9B020E2B29DFE12400EBBC83 /* EGBLEManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EGBLEManager.h; sourceTree = "<group>"; };
-		9B020E2C29DFE12400EBBC83 /* EGBLEManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EGBLEManager.m; sourceTree = "<group>"; };
 		9B020E2E29DFE35D00EBBC83 /* DataInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataInputStream.h; sourceTree = "<group>"; };
 		9B020E2F29DFE35D00EBBC83 /* DataOutputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataOutputStream.h; sourceTree = "<group>"; };
 		9B020E3029DFE35D00EBBC83 /* DataInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataInputStream.m; sourceTree = "<group>"; };
@@ -47,8 +44,7 @@
 		9BC96EB629F0D821006D3629 /* EGBleCMDVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EGBleCMDVC.h; sourceTree = "<group>"; };
 		9BC96EB729F0D821006D3629 /* EGBleCMDVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EGBleCMDVC.m; sourceTree = "<group>"; };
 		9BC96EB829F0D821006D3629 /* EGBleCMDVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EGBleCMDVC.xib; sourceTree = "<group>"; };
-		9BE8D8B629E55C9800527D5C /* EGDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EGDevice.h; sourceTree = "<group>"; };
-		9BE8D8B729E55C9800527D5C /* EGDevice.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EGDevice.m; sourceTree = "<group>"; };
+		9BDAF2172A08EF9A0062D8B1 /* EGTestStripBleSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EGTestStripBleSDK.framework; sourceTree = "<group>"; };
 		D2180B74B8E7DAE128B240BB /* Pods-HMPBleSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HMPBleSDK.release.xcconfig"; path = "Target Support Files/Pods-HMPBleSDK/Pods-HMPBleSDK.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -57,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BDAF2182A08EF9A0062D8B1 /* EGTestStripBleSDK.framework in Frameworks */,
 				48294424197C316B0AE5FF40 /* Pods_HMPBleSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -115,15 +112,12 @@
 				9BC96EB629F0D821006D3629 /* EGBleCMDVC.h */,
 				9BC96EB729F0D821006D3629 /* EGBleCMDVC.m */,
 				9BC96EB829F0D821006D3629 /* EGBleCMDVC.xib */,
-				9B020E2B29DFE12400EBBC83 /* EGBLEManager.h */,
-				9B020E2C29DFE12400EBBC83 /* EGBLEManager.m */,
-				9BE8D8B629E55C9800527D5C /* EGDevice.h */,
-				9BE8D8B729E55C9800527D5C /* EGDevice.m */,
 				9B020E1B29DFDFE200EBBC83 /* Main.storyboard */,
 				9B020E1E29DFDFE400EBBC83 /* Assets.xcassets */,
 				9B020E2029DFDFE400EBBC83 /* LaunchScreen.storyboard */,
 				9B020E2329DFDFE400EBBC83 /* Info.plist */,
 				9B020E2429DFDFE400EBBC83 /* main.m */,
+				9BDAF2172A08EF9A0062D8B1 /* EGTestStripBleSDK.framework */,
 			);
 			path = HMPBleSDK;
 			sourceTree = "<group>";
@@ -139,7 +133,6 @@
 				9B020E0B29DFDFE200EBBC83 /* Sources */,
 				9B020E0C29DFDFE200EBBC83 /* Frameworks */,
 				9B020E0D29DFDFE200EBBC83 /* Resources */,
-				F9F0334EDA0896E17A7593A0 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -219,23 +212,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F9F0334EDA0896E17A7593A0 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HMPBleSDK/Pods-HMPBleSDK-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HMPBleSDK/Pods-HMPBleSDK-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HMPBleSDK/Pods-HMPBleSDK-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -246,12 +222,10 @@
 				9B020E1A29DFDFE200EBBC83 /* ViewController.m in Sources */,
 				9B020E1429DFDFE200EBBC83 /* AppDelegate.m in Sources */,
 				9B020E2529DFDFE400EBBC83 /* main.m in Sources */,
-				9BE8D8B829E55C9800527D5C /* EGDevice.m in Sources */,
 				9BC96EB929F0D821006D3629 /* EGBleCMDVC.m in Sources */,
 				9B020E1729DFDFE200EBBC83 /* SceneDelegate.m in Sources */,
 				9B020E3229DFE35D00EBBC83 /* DataInputStream.m in Sources */,
 				9B020E3329DFE35D00EBBC83 /* DataOutputStream.m in Sources */,
-				9B020E2D29DFE12400EBBC83 /* EGBLEManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,6 +370,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = N9STZB3GQH;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/HMPBleSDK",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HMPBleSDK/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -424,6 +402,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = N9STZB3GQH;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/HMPBleSDK",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HMPBleSDK/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

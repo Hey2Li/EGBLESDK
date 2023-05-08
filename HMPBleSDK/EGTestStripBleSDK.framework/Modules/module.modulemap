@@ -1,0 +1,6 @@
+framework module EGTestStripBleSDK {
+  umbrella header "EGTestStripBleSDK.h"
+
+  export *
+  module * { export * }
+}

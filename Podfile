@@ -6,5 +6,4 @@ target 'HMPBleSDK' do
   use_frameworks!
 
   # Pods for HMPBleSDK
-  pod 'BabyBluetooth'
 end

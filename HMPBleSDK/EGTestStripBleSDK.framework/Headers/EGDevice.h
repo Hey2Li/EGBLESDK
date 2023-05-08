@@ -2,7 +2,7 @@
 //  EADevice.h
 //  HMPBleSDK
 //
-//  Created by Lee on 2023/4/11.
+//  Created by Eaglenos on 2023/4/11.
 //
 
 #import <Foundation/Foundation.h>

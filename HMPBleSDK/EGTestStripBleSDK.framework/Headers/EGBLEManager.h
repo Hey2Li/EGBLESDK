@@ -2,12 +2,12 @@
 //  EABLEManager.h
 //  HMPBleSDK
 //
-//  Created by Lee on 2023/4/7.
+//  Created by Eaglenos on 2023/4/7.
 //
 
 #import <Foundation/Foundation.h>
-#import <BabyBluetooth/BabyBluetooth.h>
-#import "EGDevice.h"
+#import <EGTestStripBleSDK/EGDevice.h>
+
 NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSUInteger, EGDeviceConnectStatus) {
     EGDeviceDisConnected = 0,

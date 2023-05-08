@@ -6,7 +6,8 @@
 //
 
 #import "EGBleCMDVC.h"
-#import "EGBLEManager.h"
+#import <EGTestStripBleSDK/EGTestStripBleSDK.h>
+
 @interface EGBleCMDVC ()<UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 /// 数据源

@@ -11,7 +11,7 @@
 #define KNaviHeight      KNaviBarHeight + KStatusbarHeight
 
 #import "ViewController.h"
-#import "EGBLEManager.h"
+#import <EGTestStripBleSDK/EGTestStripBleSDK.h>
 #import "EGBleCMDVC.h"
 @interface ViewController ()<UITableViewDelegate, UITableViewDataSource, EGBLEDeviceDelegate>
 /// 列表视图
@@ -54,7 +54,8 @@
 }
 
 - (void)didConnectedDevice:(nonnull EGDevice *)device {
-    [self.deviceArray removeAllObjects];
+//    [self.deviceArray removeAllObjects];
+//    [self.tableView reloadData];
     EGBleCMDVC *vc = [[EGBleCMDVC alloc]init];
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -88,10 +89,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    if (indexPath.section > 0) {
+    if (indexPath.section > 0 && self.deviceArray.count) {
         EGDevice *device = self.deviceArray[indexPath.row];
-        __weak __typeof(self) weakSelf = self;
-        [[EGBLEManager sharedInstance]connectToDevice:device];
+        if ([EGBLEManager sharedInstance].conntectStatus == EGDeviceConnected) {
+            EGBleCMDVC *vc = [[EGBleCMDVC alloc]init];
+            [self.navigationController pushViewController:vc animated:YES];
+        }else{
+            [[EGBLEManager sharedInstance]connectToDevice:device];
+        }
         return;
     }
     NSArray *child = self.dataSource[indexPath.section];
